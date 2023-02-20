@@ -17,8 +17,8 @@ pipeline {
             }            
             steps {
                 sh "docker login -u $JFROG_CREDS_USR -p $JFROG_CREDS_PSW scpspc.jfrog.io"
-                sh "docker build --tag scpspc.jfrog.io/spring/petclinic:latest ."
-                sh "docker push scpspc.jfrog.io/spring/petclinic:latest"
+                sh "docker build --tag scpspc.jfrog.io/docker-virtual/petclinic:latest ."
+                sh "docker push scpspc.jfrog.io/docker-virtual/petclinic:latest"
             }
         }
     }
