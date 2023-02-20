@@ -2,7 +2,7 @@ pipeline {
     agent none
     stages {
         stage('Compile, Test, Package') {
-            agent { docker { image 'eclipse-temurin:17' } }
+            agent { docker { image 'eclipse-temurin:17-jdk-alpine' } }
             steps {
                 git url: 'https://github.com/urasoko/spring-petclinic.git', branch: 'main'
                 sh "./mvnw compile -Dcheckstyle.skip"
