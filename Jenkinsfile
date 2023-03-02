@@ -10,6 +10,7 @@ pipeline {
                 sh "./mvnw package -Dcheckstyle.skip -Dmaven.test.skip"
             }
         }
+
         stage('Image, push') {
             agent any
             environment {
@@ -17,8 +18,8 @@ pipeline {
             }            
             steps {
                 sh "docker login -u $JFROG_CREDS_USR -p $JFROG_CREDS_PSW scpspc.jfrog.io"
-                sh "docker build --tag scpspc.jfrog.io/docker-virtual/petclinic ."
-                sh "docker push scpspc.jfrog.io/docker-virtual/petclinic"
+                sh "docker build --tag scpspc.jfrog.io/docker-virtual/pet-jen-sh ."
+                sh "docker push scpspc.jfrog.io/docker-virtual/pet-jen-sh"
             }
         }
     }
