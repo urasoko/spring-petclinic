@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage ('Clone') {
             steps {
-                git url: 'https://github.com/urasoko/spring-petclinic.git', branch: 'main'
+                git url: 'https://github.com/urasoko/spring-petclinic.git', branch: 'jen-art-plg'
             }
         }
 
@@ -11,7 +11,7 @@ pipeline {
             steps {
                 rtServer (
                     id: 'scpspc',
-                    url: 'https://scpspc.jfrog.io',
+                    url: 'https://scpspc.jfrog.io/artifactory',
                     credentialsId: 'scpspc-key'
                 )
             }
@@ -47,6 +47,24 @@ pipeline {
                 }
             }
         }
+
+        stage ('Publish build info') {
+            steps {
+                rtPublishBuildInfo (
+                    serverId: "scpspc"
+                )
+            }
+        }
+
+        stage ('Xray Scan') {
+            steps {
+                xrayScan (
+                    serverId: 'scpspc',
+                    failBuild: false
+                )
+            }
+        }
+
 
         stage ('Push image to Artifactory') {
             steps {
