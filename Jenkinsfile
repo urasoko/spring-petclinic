@@ -1,80 +1,40 @@
 pipeline {
     agent any
+    tools {
+        jfrog 'jfrog-cli'
+    }
     stages {
-        stage ('Clone') {
+        stage('Clone') {
             steps {
-                git url: 'https://github.com/urasoko/spring-petclinic.git', branch: 'jen-art-plg'
+                git branch: 'jen-jf-plg', url: "https://github.com/urasoko/spring-petclinic"
             }
         }
 
-        stage ('Artifactory configuration') {
+        stage('Exec Maven commands') {
             steps {
-                rtServer (
-                    id: 'scpspc',
-                    url: 'https://scpspc.jfrog.io/artifactory',
-                    credentialsId: 'scpspc-key'
-                )
-            }
-        }
-
-        stage ('Exec Maven') {
-            steps {
-                rtMavenRun (
-                    tool: 'mvn 3.9.0',
-                    useWrapper: true,
-                    pom: 'pom.xml',
-                    goals: 'compile -Dcheckstyle.skip'
-                )
-                rtMavenRun (
-                    tool: 'mvn 3.9.0',
-                    useWrapper: true,
-                    pom: 'pom.xml',
-                    goals: 'test -Dcheckstyle.skip'
-                )
-                rtMavenRun (
-                    tool: 'mvn 3.9.0',
-                    useWrapper: true,
-                    pom: 'pom.xml',
-                    goals: 'package -Dcheckstyle.skip -Dmaven.test.skip'
-                )
+                jf 'mvn-config --repo-resolve-releases maven-virtual --repo-resolve-snapshots maven-virtual --repo-deploy-releases maven-virtual --repo-deploy-snapshots maven-virtual'
+                sh "./mvnw compile -Dcheckstyle.skip"
+                sh "./mvnw test -Dcheckstyle.skip"
+                sh "./mvnw package -Dcheckstyle.skip -Dmaven.test.skip"
             }
         }
 
         stage ('Build docker image') {
             steps {
                 script {
-                    docker.build('scpspc.jfrog.io/docker-virtual/pet-jen-art:latest', '.')
+                    docker.build('scpspc.jfrog.io/docker-virtual/pet-jen-jf:latest', '.')
                 }
             }
         }
 
-        stage ('Publish build info') {
+        stage('Push') {
+            environment {
+                JFROG_CREDS = credentials('jfrog-art-creds')
+            }
             steps {
-                rtPublishBuildInfo (
-                    serverId: "scpspc"
-                )
+                sh "docker login -u $JFROG_CREDS_USR -p $JFROG_CREDS_PSW scpspc.jfrog.io"
+                sh 'docker push scpspc.jfrog.io/docker-virtual/pet-jen-jf:latest'
             }
         }
-
-        stage ('Xray Scan') {
-            steps {
-                xrayScan (
-                    serverId: 'scpspc',
-                    failBuild: false
-                )
-            }
-        }
-
-
-        stage ('Push image to Artifactory') {
-            steps {
-                rtDockerPush(
-                    serverId: 'scpspc',
-                    image: 'scpspc.jfrog.io/docker-virtual/pet-jen-art:latest',
-                    targetRepo: 'docker-virtual'
-                )
-            }
-        }
-
     }
 }
