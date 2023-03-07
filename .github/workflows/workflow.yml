@@ -1,4 +1,4 @@
-name: "JFrog CLI"
+name: "Petclinic JFrog CLI"
 on:
   push:
     branches: [ ghb-act ]
@@ -8,11 +8,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup JFrog CLI
         uses: jfrog/setup-jfrog-cli@v3
         env:
           JF_ENV_1: ${{ secrets.JF_SECRET_ENV_1 }}
+      - name: Run Maven Tasks
+        run: ./mvnw compile -Dcheckstyle.skip
+        run: ./mvnw test -Dcheckstyle.skip
+        run: ./mvnw package -Dcheckstyle.skip -Dmaven.test.skip
       - name: Run JFrog CLI
         run: |
           # Collect environment variables for the build
