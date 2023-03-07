@@ -19,10 +19,7 @@ jobs:
           ./mvnw compile -Dcheckstyle.skip
           ./mvnw test -Dcheckstyle.skip
           ./mvnw package -Dcheckstyle.skip -Dmaven.test.skip
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build and push
+s      - name: Build and push
         uses: docker/build-push-action@v4
         with:
           push: false
