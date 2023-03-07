@@ -24,6 +24,6 @@ jobs:
     steps:
       - name: Build and push
         uses: docker/build-push-action@v4
-          with:
+        with:
           push: false
           tags: scpspc.jfrog.io/docker-virtual/ghb-act:latest
