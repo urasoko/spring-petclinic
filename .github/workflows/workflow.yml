@@ -16,11 +16,6 @@ jobs:
           ./mvnw compile -Dcheckstyle.skip
           ./mvnw test -Dcheckstyle.skip
           ./mvnw package -Dcheckstyle.skip -Dmaven.test.skip
-      # - uses: docker/login-action@v2
-      #   with:
-      #     registry: scpspc.jfrog.io
-      #     username: ${{ secrets.JF_USER }}
-      #     password: ${{ secrets.JF_PASSWORD }}
       - uses: docker/build-push-action@v4
         with:
           context: .
@@ -33,3 +28,4 @@ jobs:
         run: |
           jf rt dp scpspc.jfrog.io/docker-virtual/ghb-act:latest docker-virtual --build-name=ghb-act --build-number=1.0.0
           jf rt bp ghb-act 1.0.0
+          jf rt bs ghb-act 1.0.0
