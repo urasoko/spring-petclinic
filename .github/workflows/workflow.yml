@@ -16,13 +16,19 @@ jobs:
           ./mvnw compile -Dcheckstyle.skip
           ./mvnw test -Dcheckstyle.skip
           ./mvnw package -Dcheckstyle.skip -Dmaven.test.skip
-      - uses: docker/login-action@v2
-        with:
-          registry: scpspc.jfrog.io
-          username: ${{ secrets.JF_USER }}
-          password: ${{ secrets.JF_PASSWORD }}
+      # - uses: docker/login-action@v2
+      #   with:
+      #     registry: scpspc.jfrog.io
+      #     username: ${{ secrets.JF_USER }}
+      #     password: ${{ secrets.JF_PASSWORD }}
       - uses: docker/build-push-action@v4
         with:
           context: .
-          push: true
+          push: false
           tags: scpspc.jfrog.io/docker-virtual/ghb-act:latest
+      - uses: jfrog/setup-jfrog-cli@v3
+        env:
+          JF_ENV_1: ${{ secrets.JF_SECRET_ENV_1 }}
+      - name: Run JFrog CLI
+        run: |
+          jfrog rt dp scpspc.jfrog.io/docker-virtual/ghb-act:latest docker-virtual --build-name=ghb-act --build-number=1.0.0
