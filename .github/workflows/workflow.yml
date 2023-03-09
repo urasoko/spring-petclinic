@@ -27,6 +27,8 @@ jobs:
       - name: Run JFrog CLI
         run: |
           jf docker push sok.jfrog.io/docker-dev/ghb-act:latest --build-name=ghb-act --build-number=1.0.0
+          jf rt bce ghb-act 1.0.0
+          jf rt bag ghb-act 1.0.0
           jf rt bp ghb-act 1.0.0
           jf rt bs ghb-act 1.0.0
-          jf rt bpr ghb-act 1.0.0 docker-stg
+          jf rt bpr --status=Staging ghb-act 1.0.0 docker-stg
