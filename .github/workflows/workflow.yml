@@ -20,12 +20,13 @@ jobs:
         with:
           context: .
           push: false
-          tags: scpspc.jfrog.io/docker-virtual/ghb-act:latest
+          tags: sok.jfrog.io/docker-dev/ghb-act:latest
       - uses: jfrog/setup-jfrog-cli@v3
         env:
           JF_ENV_1: ${{ secrets.JF_SECRET_ENV_1 }}
       - name: Run JFrog CLI
         run: |
-          jf rt dp scpspc.jfrog.io/docker-virtual/ghb-act:latest docker-virtual --build-name=ghb-act --build-number=1.0.0
+          jf rt dp sok.jfrog.io/docker-dev/ghb-act:latest docker-dev --build-name=ghb-act --build-number=1.0.0
           jf rt bp ghb-act 1.0.0
           jf rt bs ghb-act 1.0.0
+          jf rt bpr ghb-act 1.0.0 docker-stg
