@@ -22,7 +22,7 @@ pipeline {
         stage ('Build docker image') {
             steps {
                 script {
-                    docker.build('scpspc.jfrog.io/docker-virtual/pet-jen-jf:latest', '.')
+                    docker.build('sokop-nginx:8082/docker-local/pet-jen-jf:latest', '.')
                 }
             }
         }
@@ -32,8 +32,8 @@ pipeline {
                 JFROG_CREDS = credentials('jfrog-art-creds')
             }
             steps {
-                sh "docker login -u $JFROG_CREDS_USR -p $JFROG_CREDS_PSW scpspc.jfrog.io"
-                sh 'docker push scpspc.jfrog.io/docker-virtual/pet-jen-jf:latest'
+                sh "docker login -u $JFROG_CREDS_USR -p $JFROG_CREDS_PSW sokop-nginx:8082"
+                sh 'docker push sokop-nginx:8082/docker-local/pet-jen-jf:latest'
             }
         }
     }
