@@ -12,7 +12,6 @@ pipeline {
 
         stage('Exec Maven commands') {
             steps {
-                jf 'mvn-config --repo-resolve-releases maven-virtual --repo-resolve-snapshots maven-virtual --repo-deploy-releases maven-virtual --repo-deploy-snapshots maven-virtual'
                 sh "./mvnw compile -Dcheckstyle.skip"
                 sh "./mvnw test -Dcheckstyle.skip"
                 sh "./mvnw package -Dcheckstyle.skip -Dmaven.test.skip"
@@ -22,18 +21,14 @@ pipeline {
         stage ('Build docker image') {
             steps {
                 script {
-                    docker.build('sokop-nginx:8082/docker-local/pet-jen-jf:latest', '.')
+                    docker.build('sokop-nginx:8082/docker-local/jen-jf-plg:latest', '.')
                 }
             }
         }
 
         stage('Push') {
-            environment {
-                JFROG_CREDS = credentials('jfrog-art-creds')
-            }
             steps {
-                sh "docker login -u $JFROG_CREDS_USR -p $JFROG_CREDS_PSW sokop-nginx:8082"
-                sh 'docker push sokop-nginx:8082/docker-local/pet-jen-jf:latest'
+                jf 'docker push sokop-nginx:8082/docker-local/jen-jf-plg:latest'
             }
         }
     }
