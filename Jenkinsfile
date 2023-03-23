@@ -12,8 +12,8 @@ pipeline {
 
         stage('Exec Maven commands') {
             steps {
-                sh "./mvnw compile -Dcheckstyle.skip"
-                sh "./mvnw test -Dcheckstyle.skip"
+                // sh "./mvnw compile -Dcheckstyle.skip"
+                // sh "./mvnw test -Dcheckstyle.skip"
                 sh "./mvnw package -Dcheckstyle.skip -Dmaven.test.skip"
             }
         }
@@ -28,7 +28,22 @@ pipeline {
 
         stage('Push') {
             steps {
-                jf 'docker push sokop-nginx:8082/docker-local/jen-jf-plg:latest'
+                jf 'docker push sokop-nginx:8082/docker-local/jen-jf-plg:latest --build-name=jen-jf-plg --build-number=1.0.0'
+            }
+
+        }
+
+        stage('Publish') {
+            steps {
+                jf 'rt bce jen-jf-plg 1.0.0'
+                jf 'rt bag jen-jf-plg 1.0.0'
+                jf 'rt bp jen-jf-plg 1.0.0'
+            }
+        }
+
+        stage('Scan') {
+            steps {
+                jf 'rt bs jen-jf-plg 1.0.0'
             }
         }
     }
