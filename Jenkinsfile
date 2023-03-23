@@ -43,7 +43,7 @@ pipeline {
 
         stage('Scan') {
             steps {
-                jf 'bs --fail=false jen-jf-plg 1.0.0'
+                jf 'rt bs jen-jf-plg 1.0.0'
             }
         }
     }
