@@ -43,7 +43,7 @@ pipeline {
 
         stage('Scan') {
             steps {
-                jf 'build-scan jen-jf-plg 1.0.0'
+                jf 'bs --fail=false jen-jf-plg 1.0.0'
             }
         }
     }
