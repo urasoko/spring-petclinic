@@ -28,22 +28,22 @@ pipeline {
 
         stage('Push') {
             steps {
-                jf 'docker push soleng.jfrog.io/sokop-docker-local/jen-jf-plg:latest --build-name=jen-jf-plg --build-number=1.0.0 --project=SokoP'
+                jf 'docker push soleng.jfrog.io/sokop-docker-local/jen-jf-plg:latest --build-name=jen-jf-plg --build-number=1.0.0 --project=sokop'
             }
 
         }
 
         stage('Publish') {
             steps {
-                jf 'rt bce --project=SokoP jen-jf-plg 1.0.0'
-                jf 'rt bag --project=SokoP jen-jf-plg 1.0.0'
-                jf 'rt bp --project=SokoP jen-jf-plg 1.0.0'
+                jf 'rt bce --project=sokop jen-jf-plg 1.0.0'
+                jf 'rt bag --project=sokop jen-jf-plg 1.0.0'
+                jf 'rt bp --project=sokop jen-jf-plg 1.0.0'
             }
         }
 
         stage('Scan') {
             steps {
-                jf 'rt bs --project=SokoP jen-jf-plg 1.0.0'
+                jf 'rt bs --project=sokop jen-jf-plg 1.0.0'
             }
         }
     }
