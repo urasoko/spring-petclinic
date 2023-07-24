@@ -21,14 +21,14 @@ pipeline {
         stage ('Build docker image') {
             steps {
                 script {
-                    docker.build('soleng.jfrog.io/artifactory/sokop-docker-local/jen-jf-plg:latest', '.')
+                    docker.build('soleng.jfrog.io/sokop-docker-local/jen-jf-plg:latest', '.')
                }
             }
         }
 
         stage('Push') {
             steps {
-                jf 'docker push soleng.jfrog.io/artifactory/sokop-docker-local/jen-jf-plg:latest --build-name=jen-jf-plg --build-number=1.0.0'
+                jf 'docker push soleng.jfrog.io/sokop-docker-local/jen-jf-plg:latest --build-name=jen-jf-plg --build-number=1.0.0'
             }
 
         }
