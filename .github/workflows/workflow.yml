@@ -20,7 +20,7 @@ jobs:
         with:
           context: .
           push: false
-          tags: sok.jfrog.io/ghb-act:latest
+          tags: sok.jfrog.io/docker-dev/ghb-act:latest
       - uses: jfrog/setup-jfrog-cli@v3
         env:
           JF_ENV_1: ${{ secrets.JF_SECRET_ENV_1 }}
