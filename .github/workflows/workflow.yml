@@ -35,4 +35,4 @@ jobs:
           jf rt bp ghb-act 1.0.0 --project=sokop
           # jf build-scan --rescan=true ghb-act 1.0.0 --project=sokop
           # jf build-scan --fail=false --rescan=true ghb-act 1.0.0 --project=sokop
-          # jf rt bpr --status=Staging ghb-act 1.0.0 sokop-docker-stg --project=sokop
+          jf rt bpr --status=Staging ghb-act 1.0.0 sokop-docker-stg --project=sokop
